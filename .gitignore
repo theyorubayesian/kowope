@@ -1,0 +1,13 @@
+# Workspace config
+config.json
+
+logs 
+download_explanation
+explanation
+cache
+.azureml
+automl.log
+model.pkl
+
+# Pyc Files 
+**/**/__pycache__
