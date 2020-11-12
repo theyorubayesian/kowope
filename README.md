@@ -1,9 +1,8 @@
 # Predicting Customer Loan Default Status in Kowope Mart
-## Table of Contents
+<h2>Table of Contents</h2>
 <!-- TOC -->
 
 - [Predicting Customer Loan Default Status in Kowope Mart](#predicting-customer-loan-default-status-in-kowope-mart)
-    - [Table of Contents](#table-of-contents)
     - [Project Set Up and Installation](#project-set-up-and-installation)
     - [Overview](#overview)
         - [Architecture](#architecture)
