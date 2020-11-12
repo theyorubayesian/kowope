@@ -73,7 +73,7 @@ ws.write_config(path="./file-path", file_name="config.json")
 - Open the `hyperdrive_tuning` or `automl` notebooks and hack away!
 ## Overview
 ### Architecture
-![architecture](static\architecture.png)
+![architecture](static/architecture.png)
 ### Dataset
 The Dataset used for this project is from the Data Science Nigeria Qualification Hackathon hosted on [Zindi](https://zindi.africa/hackathons/dsn-ai-bootcamp-qualification-hackathon). It is pulled from the database of Kowope Mart and contains 56,000 observations and 52 features including the target variable. The features are form fields with descriptions available in the linked Zindi page. All the features are numeric except for `form_field47` and the target column, `default_status`. As is common for tasks such as this, there is a data imbalance. More observations record a default_status of `no` compared to `yes`. 
 
