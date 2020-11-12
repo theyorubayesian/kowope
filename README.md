@@ -24,6 +24,7 @@
             - [XGBClassifier Best Model](#xgbclassifier-best-model)
             - [Voting Ensemble Final Model](#voting-ensemble-final-model)
     - [Model Deployment & Testing](#model-deployment--testing)
+        - [Active Model](#active-model)
     - [Screen Recording](#screen-recording)
     - [Standout Suggestions](#standout-suggestions)
     - [Future Improvements](#future-improvements)
@@ -34,6 +35,10 @@
 - Create a virtual environment and activate it
 ```
 $ python -m venv env
+```
+- Clone the project 
+```
+$ git clone https://github.com/theyorubayesian/nd00333-capstone.git
 ```
 - Install requirements
 ```
@@ -72,6 +77,7 @@ ws.write_config(path="./file-path", file_name="config.json")
 ```
 - Open the `hyperdrive_tuning` or `automl` notebooks and hack away!
 ## Overview
+This project leverages Azure Machine Learning to help a Retail Mart make informed decisions about what customers to offer loans. In particular, this project demonstrates the cleaning, preprocessing, registering and versioning of datasets; automated machine learning; hyperparameter tuning using HyperDrive; the creation of machine learning pipelines and retrieval of its artefacts (models, transformers) and metrics; and the deployment of a trained model for use. 
 ### Architecture
 ![architecture](static/architecture.png)
 ### Dataset
@@ -84,7 +90,9 @@ Kowope Mart is a Nigerian-based retail company that allows customers request for
 Downloading the data requires sending the Zindi API a `POST` request. A custom function, `get_data` to achieve this is included in [utils.py](utils.py). Subsequently, the data is uploaded to the workspace datastore and then used to create a TabularDataset that is registered with the workspace.
 
 ## Automated ML
-The AutoML experiment was configured to run locally rather than on a compute target. The data is cleaned before it passed into the experiment. Cleaning here involves dropping rows containing greater than a threshold (60%) of missing values and encoding categorical columns. The imputation of missing values is left to the AutoML. Two other parameters of note in the definition of the AutoMLConfiguration is the `primary_metric` and `experimentation_timeout_minutes`. As mentioned earlier, the dataset is imbalanced thus the `AUC_weighted` primary metric was used and the experiment was set to timeout in 30 minutes. The `AUC_Weighted` aggregates the performance of the model on both classes using each label's area under the `Receiver Operating Characteristic` (A plot of the True Positive and False Positive Rates).  
+The AutoML experiment was configured to run locally rather than on a compute target. The data is cleaned before it passed into the experiment. Cleaning here involves dropping rows containing greater than a threshold (60%) of missing values and encoding categorical columns. 
+The imputation of missing values is left to the AutoML. Thus the `featurization` parameter is set to `auto`. Since no validation dataset is passed into the AutoML, cross validation on the test data is allowed and `n_cross_validations` is set to 4. To enable AutoML stop poorly performing runs, `enable_early_stopping` is set to `True`. Together with `experiment_timeout_minutes` which is set to 30, both parameters help to conserve resources (time and compute) available for experimentation. The aim is for this AutoML experiment to be a precursor to a more involved HyperDrive experiment. To ensure that all the details about this experiment is made available, `verbosity` is set to `logging.INFO` meaning that all events of level `INFO`and on up are logged in the output. 
+The next set of parameteres relate specifically to the task at hand and the dataset to be used. The `task` parameter is set to `classification`, the cleaned dataset it passed in as the `training_data` parameter and the `label_column_name` which is `default_status` is specified. The last parameter of note is the `primary_metric`. As mentioned earlier, the dataset is imbalanced thus the `AUC_weighted` primary metric was used. The `AUC_Weighted` aggregates the performance of the model on both classes using each label's area under the `Receiver Operating Characteristic` (A plot of the True Positive and False Positive Rates).  
 The AutoML Run is visualised using RunDetails as shown below.
 ![AutoML RunDetails](static/automl_run_details.PNG)
 ### Results
@@ -145,7 +153,7 @@ The VotingEnsemble model was downloaded and registered with the workspace.
 ## Hyperparameter Tuning
 The aim of this HyperDrive experiment is to present a structure with which the performance of the model obtained from the AutoML Model can be improved. As mentioned earlier, the AutoML outputted a Voting Ensemble containing eight estimators. To simplify the task for this section, only three of those models (SGDClassifier, ExtraTreesClassifier and XGBClassifier in place of the RandomForestClassifier) are tuned and used in a final Voting Ensemble.
 This experiment was implemented as a pipeline so that the individual hyperdrive steps can used the same dataset and run in parallel. The first step of this pipeline is the `cleanDataStep` that takes in the raw loan dataset and cleans it. The output of this step is collected using the `PipelineData` object and registered as a dataset in the workspace. It may be useful for this pipeline to be published so that retraining can be triggered using `HTTP requests`. As such some parameters are defined using `PipelineParameter` objects so they can passed along in retraining requests. These include `threshold` for dropping columns containing missing values in train data, `dropped_columns`, `n_neighbors` to be used in the `KNNImputer` used to fill missing values.
-![hyperparameter](static/hyperdrive exp.PNG)
+![hyperparameter](static/hyperdrive_ exp.PNG)
 
 ### ExtraTreesClassifier and XGBClassifier
 Both these models belong to the class of ensemble models that combine multiple hypotheses (decision trees) to form a better hypothesis. As an example, given a feature that denotes time of the month, a hypothesis could be: Customers who borrow at the beginning of the month are more likely to default on their loans. Where these two algorithms differ is in how the individual hypotheses are combined. The XGBClassifier generates hypotheses to correct the residuals of previous ones. Whereas, a majority voting is implemented in the case of the ExtraTreesClassifier.  
@@ -186,7 +194,8 @@ These three ensure that the test data undergoes the same preprocessing that the 
 
 
 This project uses a custom cell magic `writetemplate` to automatically write some variables such as `parameters` from the notebook into `score.py`. The screenshot below shows the active model endpoint.
-![endpoint](static/model endpoint.png)
+### Active Model
+![endpoint](static/model_endpoint.png)
 
 By definition, the `run` function in `score.py` requires a a JSON document with the strucure:
 ```
