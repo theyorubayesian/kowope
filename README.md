@@ -153,7 +153,7 @@ The VotingEnsemble model was downloaded and registered with the workspace.
 ## Hyperparameter Tuning
 The aim of this HyperDrive experiment is to present a structure with which the performance of the model obtained from the AutoML Model can be improved. As mentioned earlier, the AutoML outputted a Voting Ensemble containing eight estimators. To simplify the task for this section, only three of those models (SGDClassifier, ExtraTreesClassifier and XGBClassifier in place of the RandomForestClassifier) are tuned and used in a final Voting Ensemble.
 This experiment was implemented as a pipeline so that the individual hyperdrive steps can used the same dataset and run in parallel. The first step of this pipeline is the `cleanDataStep` that takes in the raw loan dataset and cleans it. The output of this step is collected using the `PipelineData` object and registered as a dataset in the workspace. It may be useful for this pipeline to be published so that retraining can be triggered using `HTTP requests`. As such some parameters are defined using `PipelineParameter` objects so they can passed along in retraining requests. These include `threshold` for dropping columns containing missing values in train data, `dropped_columns`, `n_neighbors` to be used in the `KNNImputer` used to fill missing values.
-![hyperparameter](static/hyperdrive_ exp.PNG)
+![hyperparameter](static/hyperdrive_exp.PNG)
 
 ### ExtraTreesClassifier and XGBClassifier
 Both these models belong to the class of ensemble models that combine multiple hypotheses (decision trees) to form a better hypothesis. As an example, given a feature that denotes time of the month, a hypothesis could be: Customers who borrow at the beginning of the month are more likely to default on their loans. Where these two algorithms differ is in how the individual hypotheses are combined. The XGBClassifier generates hypotheses to correct the residuals of previous ones. Whereas, a majority voting is implemented in the case of the ExtraTreesClassifier.  
@@ -222,7 +222,7 @@ Service logs will contain some useful information about the endpoint's interacti
 
 ## Standout Suggestions
 - Logging in Deployed Web App 
-Logging offers many advantages e.g. easing the debugging process, measuring deployment performance etc.The logging implemented in this project is simple. It involves simple prints statements as shown below:
+Logging offers many advantages e.g. easing the debugging process, measuring deployment performance etc.The logging implemented in this project is simple. It involves print statements as shown below:
 ```python
 # Some code appears above this
 def init():
