@@ -2,14 +2,19 @@ import requests
 from pprint import pprint
 
 
-def get_data(path="data/Train_1.csv"):
+def get_data(path="data/Train.csv", subset="train"):
     """
 
     """
-    url = "https://api.zindi.africa/v1/competitions/dsn-ai-bootcamp-qualification-hackathon/files/Train.csv"
+    api = "https://api.zindi.africa/v1/competitions/dsn-ai-bootcamp-qualification-hackathon/files/{}.csv"
     token = {"auth_token": "hKhCphfxxZk6yjG6kJVbbj92"}
+    
+    url_set = {
+        "train": {"url": api.format("Train")},
+        "test": {"url": api.format("Test")}
+    }
 
-    response = requests.post(url, data=token)
+    response = requests.post(url_set[subset]["url"], data=token)
     data = response.content
 
     with open(path, "wb") as f:

@@ -1,13 +1,22 @@
 # Workspace config
 config.json
 
-logs 
-download_explanation
-explanation
-cache
+# Project Files
+.idea
+data
+env
+outputs
+static/Screencast.mp4
+
+# AzureML Files
 .azureml
 automl.log
-model.pkl
+azureml_automl.log
+azureml-logs
+cache
+download_explanation
+explanation
+logs 
 
 # Pyc Files 
 **/**/__pycache__
