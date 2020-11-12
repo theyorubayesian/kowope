@@ -3,6 +3,7 @@
 <!-- TOC -->
 
 - [Predicting Customer Loan Default Status in Kowope Mart](#predicting-customer-loan-default-status-in-kowope-mart)
+    - [Table of Contents](#table-of-contents)
     - [Project Set Up and Installation](#project-set-up-and-installation)
     - [Overview](#overview)
         - [Architecture](#architecture)
@@ -205,7 +206,7 @@ headers = {"Content-Type": "application/json"}
 response = requests.post(scoring_uri, sample_request_data_json, headers=headers)
 ```
 Sample results are shown in the screenshot below.
-![Endpoint results]()
+![Endpoint results](static\result.png)
 Service logs will contain some useful information about the endpoint's interaction will sample data. The [Standout Suggestions](#standout-suggestions) section discusses this in greater detail.
 ## Screen Recording
 [YouTube link](https://youtu.be/iICUf38knxI)
