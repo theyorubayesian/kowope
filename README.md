@@ -206,7 +206,7 @@ headers = {"Content-Type": "application/json"}
 response = requests.post(scoring_uri, sample_request_data_json, headers=headers)
 ```
 Sample results are shown in the screenshot below.
-![Endpoint results](static\result.png)
+![Endpoint results](static/result.png)
 Service logs will contain some useful information about the endpoint's interaction will sample data. The [Standout Suggestions](#standout-suggestions) section discusses this in greater detail.
 ## Screen Recording
 [YouTube link](https://youtu.be/iICUf38knxI)
